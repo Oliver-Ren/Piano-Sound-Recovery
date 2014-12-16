@@ -5,8 +5,8 @@ clc;
 %-------------------------------------------------------------------------
 % This code uses the enframe and overlapadd function of the VOICEBOX 
 %-------------------------------------------------------------------------
-[x0,fs0] = audioread('C:\Users\CIT-Labs\Documents\MATLAB\Test_audio\a2.wav');
-[x,fs] = audioread('C:\Users\CIT-Labs\Documents\MATLAB\Test_audio\a2_guassian_20.wav');
+[x0,fs0] = audioread('.\Test_audio\a2.wav');
+[x,fs] = audioread('.\Test_audio\a2_guassian_20.wav');
 
 x0 = x0(:,1);
 % x = x(1:50000,1);
@@ -17,14 +17,14 @@ x0 = x0(:,1);
 
 
 % Configure the parameters for the SPGL
-epsilon = 0.2;
+epsilon = 0.5;
 opts = spgSetParms('verbosity',0);
 fD = @(w,mode) p1_dic(w,mode);
 
 
 
 % Create the overlapped frame for the audio signal
-
+tic
 winSize = 1024;
 hop = winSize/4;
 overlap = winSize - hop;
@@ -52,6 +52,6 @@ subplot(2,1,1);
 spectrogram(x,wn,overlap,winSize,fs,'yaxis');
 subplot(2,1,2);
 spectrogram(X_denoised,wn,overlap,winSize,fs,'yaxis');
-
+toc
 %MSE caculation
 MSE_dB = MSE_calc(x0, X_denoised,overlap);
