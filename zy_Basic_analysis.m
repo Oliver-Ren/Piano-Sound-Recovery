@@ -15,7 +15,7 @@ clc;
 x0 = x0(:,1);
 
 % Read from the noised sound
-[x,fs] = audioread('.\Test_audio\a2_guassian_5.wav');
+[x,fs] = audioread('.\Test_audio\a2_guassian_10.wav');
 
 % matching the length to the window length 
 winSize = 1024;
@@ -75,13 +75,13 @@ spectrogram(X_denoised(:,1),wn,overlap,winSize,fs,'yaxis');
 
 figure();
 plot(epsilon,MSE_dB,'g--o',epsilon,MSE_dB1,'r--*','linewidth',1.5);
-legend('nooverlap','overlap');
+legend('nowindow','hannwindow');
 xlabel('Epsilon');
 ylabel('Mean Square Error(dB)');
 title('Mean Square Error VS Epsilon');
 figure();
 plot(epsilon,PSNR_dB,'g--o',epsilon,PSNR_dB1,'r--*','linewidth',1.5);
-legend('nooverlap','overlap');
+legend('nowindow','hannwindow');
 xlabel('Epsilon');
 ylabel('Peak signal-to-noise ratio(dB)');
 title('Peak signal-to-noise ratio VS Epsilon');

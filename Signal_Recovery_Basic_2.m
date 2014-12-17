@@ -26,7 +26,7 @@ sig_length = length(x);
 num_of_frames = floor((sig_length - winSize)/hop) + 1;
 length_x = winSize + (num_of_frames-1) * hop;
 signal_with_noise = x(1:length_x,1);
-
+signal_without_noise = x0(1:length_x,1);
 
 
 % Configure the parameters for the SPGL
