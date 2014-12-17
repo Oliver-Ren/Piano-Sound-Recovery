@@ -15,7 +15,7 @@ clc;
 x0 = x0(:,1);
 
 % Read from the noised sound
-[x,fs] = audioread('.\Test_audio\a3_guassian_5.wav');
+[x,fs] = audioread('.\Test_audio\a3_guassian_10.wav');
 
 % matching the length to the window length 
 winSize = 1024;

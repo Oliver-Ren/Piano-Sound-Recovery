@@ -11,11 +11,11 @@ clc;
 %-------------------------------------------------------------------------
 
 % Read from the original sound
-[x0,fs0] = audioread('.\Test_audio\a2.wav');
+[x0,fs0] = audioread('.\Test_audio\a5.wav');
 x0 = x0(:,1);
 
 % Read from the noised sound
-[x,fs] = audioread('.\Test_audio\a2_guassian_10.wav');
+[x,fs] = audioread('.\Test_audio\a5_guassian_10.wav');
 
 % matching the length to the window length 
 winSize = 1024;
@@ -37,7 +37,7 @@ fD1 = @(w,mode) nooverlap_dct_dic(w,mode);
 
 % iteration of calculation of different epsilons
 num_iter = 20;
-epsilon = linspace(0.01,10,num_iter);
+epsilon = linspace(0.01,2.5,num_iter);
 MSE_dB = zeros(num_iter,1);
 PSNR_dB = zeros(num_iter,1);
 MSE_dB1 = zeros(num_iter,1);

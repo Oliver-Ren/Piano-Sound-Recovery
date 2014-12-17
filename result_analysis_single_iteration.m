@@ -11,11 +11,11 @@ clc;
 %-------------------------------------------------------------------------
 
 % Read from the original sound
-[x0,fs0] = audioread('.\Test_audio\a5.wav');
+[x0,fs0] = audioread('.\Test_audio\a2.wav');
 x0 = x0(:,1);
 
 % Read from the noised sound
-[x,fs] = audioread('.\Test_audio\a5_guassian_5.wav');
+[x,fs] = audioread('.\Test_audio\a2_guassian_5.wav');
 
 % matching the length to the window length 
 winSize = 1024;
@@ -38,14 +38,14 @@ fD1 = @(w,mode) nooverlap_dct_dic(w,mode);
 
 % iteration of calculation of different epsilons
 num_iter = 20;
-epsilon = linspace(0.01,10,num_iter);
+epsilon = linspace(0.01,5,num_iter);
 MSE_dB = zeros(num_iter,1);
 PSNR_dB = zeros(num_iter,1);
 MSE_dB1 = zeros(num_iter,1);
 PSNR_dB1 = zeros(num_iter,1);
 X_denoised = zeros(length_x,num_iter);
 X_denoised1 = zeros(length_x,num_iter);
-for i =4
+for i = 4
     % Denoise
     tic
     x_hat = spg_bpdn(fD, signal_with_noise, epsilon(i),opts);
@@ -78,7 +78,7 @@ title('Spectrogram of original piano sound A5');
 ylim([0 6000]);
 subplot(3,1,2);
 spectrogram(signal_with_noise,wn,overlap,winSize,fs,'yaxis');
-title('Spectrogram of piano sound A5 with noise SNR = 5dB');
+title('Spectrogram of piano sound A5 with noise SNR = 20dB');
 ylim([0 6000]);
 colorbar;
 subplot(3,1,3);
