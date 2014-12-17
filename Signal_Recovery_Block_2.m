@@ -11,11 +11,11 @@ clc;
 %-------------------------------------------------------------------------
 
 % Read from the original sound
-[x0,fs0] = audioread('.\Test_audio\a2.wav');
+[x0,fs0] = audioread('.\Test_audio\24nocturnea.wav');
 x0 = x0(:,1);
 
 % Read from the noised sound
-[x,fs] = audioread('.\Test_audio\a2_guassian_20.wav');
+[x,fs] = audioread('.\Test_audio\24nocturnea_gaussian_10.wav');
 
 % matching the length to the window length 
 winSize = 1024;
@@ -36,13 +36,13 @@ Group = reshape(repmat(linspace(1,winSize,winSize),block_size,1),num_of_blocks*b
 % Configure the parameters for the SPGL
 % epsilon = 1.8;
 opts = spgSetParms('verbosity',0);
-fD = @(w,mode) nowindow_dct_block_dic(w,mode);
+fD = @(w,mode) overlap_dct_block_dic(w,mode);
 
 
 % iteration of calculation of different epsilons
 num_iter = 1;
 % epsilon = linspace(0.1,2.5,num_iter);
-epsilon = 1;
+epsilon = 30;
 MSE_dB = zeros(num_iter,1);
 PSNR_dB = zeros(num_iter,1);
 X_denoised = zeros(length_x,num_iter);

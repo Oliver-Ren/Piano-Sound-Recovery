@@ -11,11 +11,11 @@ clc;
 %-------------------------------------------------------------------------
 
 % Read from the original sound
-[x0,fs0] = audioread('.\Test_audio\a2.wav');
+[x0,fs0] = audioread('.\Test_audio\24nocturnea.wav');
 x0 = x0(:,1);
 
 % Read from the noised sound
-[x,fs] = audioread('.\Test_audio\a2_guassian_20.wav');
+[x,fs] = audioread('.\Test_audio\24nocturnea_gaussian_10.wav');
 
 % matching the length to the window length 
 winSize = 1024;
@@ -32,19 +32,20 @@ signal_without_noise = x0(1:length_x,1);
 % Configure the parameters for the SPGL
 % epsilon = 1.8;
 opts = spgSetParms('verbosity',0);
-fD = @(w,mode) nooverlap_dct_dic(w,mode);
+fD = @(w,mode) overlap_dct_dic(w,mode);
 
 
 % iteration of calculation of different epsilons
-num_iter = 15;
-epsilon = linspace(0.1,2.5,num_iter);
+num_iter = 1;
+% epsilon = linspace(0.1,2.5,num_iter);
+epsilon = 25;
 MSE_dB = zeros(num_iter,1);
 PSNR_dB = zeros(num_iter,1);
 X_denoised = zeros(length_x,num_iter);
-for i = 1:15
+for i = 1:num_iter
     % Denoise
     tic
-    x_hat = spg_bpdn(fD, signal_with_noise, epsilon(i),opts);
+    x_hat = spg_bpdn(fD, signal_with_noise, epsilon,opts);
     toc
     X_denoised(:,i) = fD(x_hat,1); % for synthessis
     sound(X_denoised(:,i), fs);

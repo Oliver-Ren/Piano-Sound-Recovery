@@ -1,7 +1,7 @@
 clear all;
 close all;
 clc;
-[y,Fs] = audioread('a5.wav');
+[y,Fs] = audioread('24nocturnea.wav');
 %sound(y,Fs);
 xLeft = y(:,1);
 [m,n] = size(xLeft);
@@ -11,15 +11,21 @@ XLeftFFT = fft(xLeft);
 XLeftMag = log(abs(XLeftFFT));
 figure();
 plot(XLeftMag);
-y = awgn(xLeft,5,'measured'); 
+y = awgn(xLeft,10,'measured'); 
 figure();
 plot(y);
 Y = fft(y);
 YMag = log10(abs(Y));
 figure();
 plot(YMag);
-sound(y(1:120000),Fs);
-audiowrite('a5_guassian_5.wav',y(1:120000),Fs);
+start_time = 40;
+end_time = 60;
+start_sample = start_time * Fs;
+end_sample = end_time * Fs;
+
+sound(y(start_sample:end_sample),Fs);
+
+audiowrite('./Test_audio/24nocturnea_gaussian_10.wav',y(start_sample:end_sample),Fs);
 %A = dctmtx(512);
 %D =[A eye(512)];
 % sigma = 0.1;                                    
