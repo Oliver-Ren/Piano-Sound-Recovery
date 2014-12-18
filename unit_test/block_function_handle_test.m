@@ -7,13 +7,15 @@ addpath '../'
 %-------------------------------------------------------------------------
 % x0 = sin(0.01:0.01:20*pi)';
 sig_length = 10240;
-% inter = 1/50;
-% x2 = sin(inter:inter:sig_length*inter)';
-% inter = 1/3;
-% x1 = sin(inter:inter:sig_length*inter)';
-% x0 = x1+x2;
+inter = 1;
+x3 = sin(inter:inter:sig_length*inter)';
+inter = 1/50;
+x2 = sin(inter:inter:sig_length*inter)';
+inter = 1/3;
+x1 = sin(inter:inter:sig_length*inter)';
+x0 = x1+x2+x3;
 
-x0 = linspace(1,sig_length,sig_length)';
+% x0 = linspace(1,sig_length,sig_length)';
 % x0 = ones(10240,1);
 
 % x = x0 + randn(length(x0),1);
@@ -53,7 +55,7 @@ block_size = floor((length_y - winSize)/hop) + 1;
 num_of_blocks = winSize;
 Group = reshape(repmat(linspace(1,winSize,winSize),block_size,1),num_of_blocks*block_size,1);
 
-X_block_recoveried  = spg_group(fD,x0,Group,0,opts); 
+X_block_recovered  = spg_group(fD,x0,Group,0,opts); 
 
 
 

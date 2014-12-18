@@ -1,15 +1,18 @@
-%% Cluseter Norm Denoising
-% Test for Cluster Norm Based Denoising using the ADMM method
+%-------------------------------------------------------------------------
+% Piano Sound Recovery using Block Sparsity, optimized with  Version 2.0
+% In this version, we tried to implement the function handle as professor
+% Studer talked
 
-addpath('../');
-addpath('../toolbox_optim');
+% This code uses the enframe and overlapadd function of the VOICEBOX 
+%-------------------------------------------------------------------------
+
+
+addpath('./toolbox_optim');
 addpath('./toolbox_optim/toolbox/');
 
 %%
 % Load Vactor.
-load('test_x_block.mat','-mat')
-y = X_block_recovered;
-block_size = 19;
+
 
 
 %%
