@@ -1,3 +1,4 @@
+%%
 %-------------------------------------------------------------------------
 % Piano Sound Recovery using Block Sparsity, optimized with Cluster Norm
 % Version 1.0
@@ -16,71 +17,67 @@ addpath('./toolbox_optim');
 addpath('./toolbox_optim/toolbox/');
 
 %%
-% Load Vactor.
+% Read from the original sound
+[x0,fs0] = audioread('.\Test_audio\a2.wav');
+x0 = x0(:,1);
 
+% Read from the noised sound
+[x,fs] = audioread('.\Test_audio\a2_guassian_20.wav');
+
+%%
+% matching the length to the window length 
+winSize = 1024;
+hop = winSize/2;
+overlap = winSize - hop;
+wn = sqrt(hann(winSize,'periodic'));
+sig_length = length(x);
+num_of_frames = floor((sig_length - winSize)/hop) + 1;
+length_x = winSize + (num_of_frames-1) * hop;
+
+%%
+%% matching the length of wav
+signal_without_noise = x0(1:length_x,1);
+signal_with_noise = x(1:length_x,1);
 
 
 %%
-% Display it.
-
-clf;
-plot(X);
-
-%%
-% We aim at minimising:
+% Calculate the group information
+block_size = num_of_frames;
+num_of_blocks = winSize;
+Group = reshape(repmat(linspace(1,winSize,winSize),block_size,1),num_of_blocks*block_size,1);
 
 %%
-% |min_x 1/2*norm(y-x)^2 + lambda* cluster_norm (K(x),1)|
-
-
-%%
-% Regularization parameter.
-
-lambda = 1;
-
-% block_size = 
+% Configure the parameters for the SPGL
+% epsilon = 1.8;
+opts = spgSetParms('verbosity',0);
+fD = @(w,mode) overlap_dct_block_dic(w,mode);
 
 %%
-% where |K| is a permutation matrx of choosing clusters.
+% iteration of calculation of different epsilons
+num_iter = 1;
+% epsilon = linspace(0.1,2.5,num_iter);
+epsilon = 1;
+MSE_dB = zeros(num_iter,1);
+PSNR_dB = zeros(num_iter,1);
+X_denoised = zeros(length_x,num_iter);
+for i = 1:num_iter
+    % Denoise
+    tic
+    x_hat = spg_group(fD, signal_with_noise, Group, epsilon(i),opts);
+    toc
+    X_denoised(:,i) = fD(x_hat,1); % for synthessis
+    sound(X_denoised(:,i), fs);
+    
+    % analyze the result
+    %MSE caculation
+    [MSE_dB(i), PSNR_dB(i)] = MSE_PSNR_calc(x0, X_denoised(:,i),overlap);
+end
 
-K = @(x) cluster_dic_func(x, block_size);
-KS = @(x) cluster_dic_inv(x, block_size);
 
-%%
-% It can be put as the minimization of |F(K*x) + G(x)|
+Cluster_ADMM_Continued;
 
-% Amplitude = @(u)sqrt(sum(u.^2));
-F = @(u)lambda*cluster_norm(u);
-G = @(x)1/2*norm(y-x)^2;
 
-%%
-% The proximity operator of |F| is the soft thresholding.
 
-Normalize = @(u)u./ max(Amplitude(u),1e-10);
-ProxF = @(u,tau) perform_soft_thresholding(Amplitude(u),lambda*tau) .* Normalize(u);
-ProxFS = compute_dual_prox(ProxF);
-
-%%
-% The proximity operator of G.
-
-ProxG = @(x,tau)(x+tau*y)/(1+tau);
-
-%%
-% Function to record progression of the functional.
-
-options.report = @(x)G(x) + F(K(x));
-
-%%
-% Run the ADMM algorihtm.
-
-options.niter = 300;
-[xAdmm,EAdmm] = perform_admm(y, K,  KS, ProxFS, ProxG, options);
-
-%%
-% Display image.
-
-clf;
-plot(xAdmm);
 
 
  
