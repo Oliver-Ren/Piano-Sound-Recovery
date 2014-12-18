@@ -15,15 +15,15 @@ KS = @(x) cluster_dic_inv(x, block_size);
 %%
 % It can be put as the minimization of |F(K*x) + G(x)|
 
-% Amplitude = @(u)sqrt(sum(u.^2));
+
 F = @(u)lambda*cluster_norm(u);
 G = @(x)1/2*norm(y-x)^2;
 
 %%
 % The proximity operator of |F| is the soft thresholding.
 
-Normalize = @(u)u./ max(Amplitude(u),1e-10);
-ProxF = @(u,tau) perform_soft_thresholding(Amplitude(u),lambda*tau) .* Normalize(u);
+
+ProxF = @(u,tau) perform_soft_thresholding(u,lambda*tau);
 ProxFS = compute_dual_prox(ProxF);
 
 %%
@@ -45,29 +45,12 @@ options.niter = 300;
 %%
 % Tranform into time domain
 X_cluster_denoised = fD(xAdmm,1);
-figure();
-plot(xAdmm);
+
 
 
 %%
 % Plot the spectrogram
-figure();
-subplot(2,2,1);
-spectrogram(signal_without_noise,wn,overlap,winSize,fs,'yaxis');
-colorbar;
-y_max = 6000;
-title('Spectrogram of original piano sound A5');
-ylim([0 6000]);
-subplot(2,2,2);
-spectrogram(signal_with_noise,wn,overlap,winSize,fs,'yaxis');
-title('Spectrogram of piano sound A5 with noise SNR = 20dB');
-ylim([0 6000]);
-colorbar;
-subplot(2,2,3);
-spectrogram(X_denoised(:,1),wn,overlap,winSize,fs,'yaxis');
-title(['Spectrogram of denoised piano sound A5, \epsilon=' num2str(epsilon)]);
-ylim([0 6000]);
-colorbar;
+
 
 subplot(2,2,4);
 spectrogram(X_cluster_denoised,wn,overlap,winSize,fs,'yaxis');

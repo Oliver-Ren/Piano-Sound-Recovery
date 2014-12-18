@@ -73,7 +73,25 @@ for i = 1:num_iter
     [MSE_dB(i), PSNR_dB(i)] = MSE_PSNR_calc(x0, X_denoised(:,i),overlap);
 end
 
-
+%%
+%plot the spectrogram
+figure();
+subplot(2,2,1);
+spectrogram(signal_without_noise,wn,overlap,winSize,fs,'yaxis');
+colorbar;
+y_max = 6000;
+title('Spectrogram of original piano sound A5');
+ylim([0 6000]);
+subplot(2,2,2);
+spectrogram(signal_with_noise,wn,overlap,winSize,fs,'yaxis');
+title('Spectrogram of piano sound A5 with noise SNR = 20dB');
+ylim([0 6000]);
+colorbar;
+subplot(2,2,3);
+spectrogram(X_denoised(:,1),wn,overlap,winSize,fs,'yaxis');
+title(['Spectrogram of denoised piano sound A5, \epsilon=' num2str(epsilon)]);
+ylim([0 6000]);
+colorbar;
 Cluster_ADMM_Continued;
 
 

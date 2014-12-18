@@ -12,11 +12,7 @@ y = X_block_recovered;
 block_size = 19;
 
 
-%%
-% Display it.
 
-clf;
-plot(X);
 
 %%
 % We aim at minimising:
@@ -28,7 +24,7 @@ plot(X);
 %%
 % Regularization parameter.
 
-lambda = .2;
+lambda = 1;
 
 % block_size = 
 
@@ -41,14 +37,14 @@ KS = @(x) cluster_dic_inv(x, block_size);
 %%
 % It can be put as the minimization of |F(K*x) + G(x)|
 
-% Amplitude = @(u)sqrt(sum(u.^2));
-F = @(u)lambda*sum(sum(Amplitude(u)));
+Amplitude = @(u)sqrt(sum(u.^2));
+F = @(u)lambda*cluster_norm(u);
 G = @(x)1/2*norm(y-x)^2;
 
 %%
 % The proximity operator of |F| is the soft thresholding.
 
-Normalize = @(u)u./ max(Amplitude(u),1e-10);
+Normalize = @(u) u./ max(Amplitude(u),1e-10);
 ProxF = @(u,tau) perform_soft_thresholding(Amplitude(u),lambda*tau) .* Normalize(u);
 ProxFS = compute_dual_prox(ProxF);
 
@@ -72,7 +68,7 @@ options.niter = 300;
 % Display image.
 
 clf;
-imageplot(xAdmm);
+plot(xAdmm);
 
 
  
